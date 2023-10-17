@@ -51,28 +51,26 @@ function App() {
   });
 
   const onSubmit = (data: any) => {
-    console.log({ ...data, liderId: id });
     const key = window.location.href.includes("adm") ? { admId: id } : { liderId: id }
-    console.log(key)
-    // setLoading(true)
-    // axios.post(`${process.env.REACT_APP_PORT_PROJECT_BACKEND}/api/colaborador`, {
-    //   ...data,
-    // }).then((res) => {
-    //   setLoading(false)
-    //   setApiSuccess(true)
-    //   reset()
-    //   toast.success(res.data.message)
-    //   setTimeout(() => {
-    //     window.scrollTo({
-    //       top: 0,
-    //       behavior: 'smooth',
-    //     })
-    //     setApiSuccess(false)
-    //   }, 3000)
-    // }).catch((err) => {
-    //   setLoading(false)
-    //   toast.error(err.response.data.message)
-    // })
+    setLoading(true)
+    axios.post(`${process.env.REACT_APP_PORT_PROJECT_BACKEND}/api/colaborador`, {
+      ...data,
+    }).then((res) => {
+      setLoading(false)
+      setApiSuccess(true)
+      reset()
+      toast.success(res.data.message)
+      setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        })
+        setApiSuccess(false)
+      }, 3000)
+    }).catch((err) => {
+      setLoading(false)
+      toast.error(err.response.data.message)
+    })
   };
 
   const cepListenner = watch("cep")

@@ -1,15 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: "/register/:id?",
+    element: <App />,
+  },
+  {
+    path: "/register/adm/:id?",
+    element: <App />,
+  },
+]);
+
 root.render(
   <React.StrictMode>
-    <App />
+    <ToastContainer />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 

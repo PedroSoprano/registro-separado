@@ -55,6 +55,7 @@ function App() {
     setLoading(true)
     axios.post(`${process.env.REACT_APP_PORT_PROJECT_BACKEND}/api/colaborador`, {
       ...data,
+      ...key
     }).then((res) => {
       setLoading(false)
       setApiSuccess(true)

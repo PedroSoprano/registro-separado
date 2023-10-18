@@ -51,7 +51,7 @@ function App() {
   });
 
   const onSubmit = (data: any) => {
-    const key = window.location.href.includes("adm") ? { admId: id, recrutadorId: id } : { liderId: id, recrutadorId: id }
+    const key = window.location.href.includes("adm") ? { admId: id, } : { liderId: id }
     setLoading(true)
     axios.post(`${process.env.REACT_APP_PORT_PROJECT_BACKEND}/api/colaborador`, {
       ...data,

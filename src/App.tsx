@@ -53,6 +53,7 @@ function App() {
   });
 
   const onSubmit = (data: any) => {
+
     const key = window.location.href.includes("adm") ? { admId: id, } : { liderId: id }
     setLoading(true)
     axios.post(`${process.env.REACT_APP_PORT_PROJECT_BACKEND}/api/colaborador`, {
@@ -61,6 +62,8 @@ function App() {
     }).then((res) => {
       setLoading(false)
       setApiSuccess(true)
+      setPhoneNumber("")
+      setCpf("")
       reset()
       toast.success(res.data.message)
       setTimeout(() => {

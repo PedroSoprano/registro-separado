@@ -30,7 +30,8 @@ const schema = Yup.object().shape({
   zona: Yup.string().required('Zona eleitoral é obrigatório'),
   secao: Yup.string().required('Sessão é obrigatório'),
   faixaSalarial: Yup.number().required('Salário mínimo é obrigatório').typeError('Salário mínimo é obrigatório'),
-  recebeBeneficio: Yup.boolean()
+  recebeBeneficio: Yup.boolean(),
+  nomeMae: Yup.string().required('O nome da mãe é obrigatório')
 });
 
 
@@ -53,30 +54,30 @@ function App() {
   });
 
   const onSubmit = (data: any) => {
-
-    const key = window.location.href.includes("adm") ? { admId: id, } : { liderId: id }
-    setLoading(true)
-    axios.post(`${process.env.REACT_APP_PORT_PROJECT_BACKEND}/api/colaborador`, {
-      ...data,
-      ...key
-    }).then((res) => {
-      setLoading(false)
-      setApiSuccess(true)
-      setPhoneNumber("")
-      setCpf("")
-      reset()
-      toast.success(res.data.message)
-      setTimeout(() => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        })
-        setApiSuccess(false)
-      }, 3000)
-    }).catch((err) => {
-      setLoading(false)
-      toast.error(err.response.data.message)
-    })
+    console.log(data)
+    // const key = window.location.href.includes("adm") ? { admId: id, } : { liderId: id }
+    // setLoading(true)
+    // axios.post(`${process.env.REACT_APP_PORT_PROJECT_BACKEND}/api/colaborador`, {
+    //   ...data,
+    //   ...key
+    // }).then((res) => {
+    //   setLoading(false)
+    //   setApiSuccess(true)
+    //   setPhoneNumber("")
+    //   setCpf("")
+    //   reset()
+    //   toast.success(res.data.message)
+    //   setTimeout(() => {
+    //     window.scrollTo({
+    //       top: 0,
+    //       behavior: 'smooth',
+    //     })
+    //     setApiSuccess(false)
+    //   }, 3000)
+    // }).catch((err) => {
+    //   setLoading(false)
+    //   toast.error(err.response.data.message)
+    // })
   };
 
   const handleCPF = (event: any) => {
@@ -330,9 +331,17 @@ function App() {
               variant="filled"
               sx={errors.secao?.message ? inputError : input}
             />
+            <TextField
+              label={errors.nomeMae?.message ?? "Nome da mãe"}
+              {...register("nomeMae")}
+              error={!!errors.nomeMae?.message}
+              variant="filled"
+              {...register}
+              sx={windowWidth < 550 ? errors.nomeMae?.message ? inputError : input : errors.nomeMae?.message ? inputError : { ...input, gridColumn: "1/3" }}
+            />
           </Box>
           <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
-            Benefícios
+            Faixa salarial
           </Typography>
           <Box sx={windowWidth < 550 ? inputGroupMobile : inputGroup1}>
             <FormControl variant='filled'>
@@ -344,24 +353,28 @@ function App() {
                 sx={errors.faixaSalarial?.message ? inputError : { ...input, padding: 0 }}
                 defaultValue={""}
               >
-                <MenuItem value={"0"}>Menos de 1 salário mínimo</MenuItem>
-                <MenuItem value={"1"}>1 Salário mínimo</MenuItem>
-                <MenuItem value={"2"}>2 Salários mínimo</MenuItem>
-                <MenuItem value={"3"}>3 Salários mínimo</MenuItem>
-                <MenuItem value={"4"}>4 Salários mínimo</MenuItem>
-                <MenuItem value={"5"}>5 Salários mínimo</MenuItem>
-                <MenuItem value={"6"}>6 Salários mínimo</MenuItem>
-                <MenuItem value={"7"}>Mais de 6 salários mínimo</MenuItem>
+                <MenuItem value={0}>Menos de 1 salário mínimo</MenuItem>
+                <MenuItem value={1}>1 Salário mínimo</MenuItem>
+                <MenuItem value={2}>2 Salários mínimo</MenuItem>
+                <MenuItem value={3}>3 Salários mínimo</MenuItem>
+                <MenuItem value={4}>4 Salários mínimo</MenuItem>
+                <MenuItem value={5}>5 Salários mínimo</MenuItem>
+                <MenuItem value={6}>6 Salários mínimo</MenuItem>
+                <MenuItem value={7}>Mais de 6 salários mínimo</MenuItem>
               </Select>
             </FormControl>
-            <Box sx={containerSelect}>
-              <Typography>Recebe algum benefício?</Typography>
-              <Typography sx={{ marginLeft: "20px", fontWeight: 700 }}>Não</Typography>
-              <Switch
-                {...register("recebeBeneficio")}
-              />
-              <Typography sx={{ fontWeight: 700 }}>Sim</Typography>
-            </Box>
+          </Box>
+          <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
+            Benefícios
+          </Typography>
+          <Box sx={containerSelect}>
+            <Typography>Recebe algum benefício?</Typography>
+            <Typography sx={{ marginLeft: "20px", fontWeight: 700 }}>Não</Typography>
+            <Switch
+              color='info'
+              {...register("recebeBeneficio")}
+            />
+            <Typography sx={{ fontWeight: 700 }}>Sim</Typography>
           </Box>
           {loading ?
             <Box sx={{ display: "flex", marginTop: 5, justifyContent: "end" }}>

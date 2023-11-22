@@ -54,30 +54,30 @@ function App() {
   });
 
   const onSubmit = (data: any) => {
-    console.log(data)
-    // const key = window.location.href.includes("adm") ? { admId: id, } : { liderId: id }
-    // setLoading(true)
-    // axios.post(`${process.env.REACT_APP_PORT_PROJECT_BACKEND}/api/colaborador`, {
-    //   ...data,
-    //   ...key
-    // }).then((res) => {
-    //   setLoading(false)
-    //   setApiSuccess(true)
-    //   setPhoneNumber("")
-    //   setCpf("")
-    //   reset()
-    //   toast.success(res.data.message)
-    //   setTimeout(() => {
-    //     window.scrollTo({
-    //       top: 0,
-    //       behavior: 'smooth',
-    //     })
-    //     setApiSuccess(false)
-    //   }, 3000)
-    // }).catch((err) => {
-    //   setLoading(false)
-    //   toast.error(err.response.data.message)
-    // })
+    // console.log(data)
+    const key = window.location.href.includes("adm") ? { admId: id, } : { liderId: id }
+    setLoading(true)
+    axios.post(`${process.env.REACT_APP_PORT_PROJECT_BACKEND}/api/colaborador`, {
+      ...data,
+      ...key
+    }).then((res) => {
+      setLoading(false)
+      setApiSuccess(true)
+      setPhoneNumber("")
+      setCpf("")
+      reset()
+      toast.success(res.data.message)
+      setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        })
+        setApiSuccess(false)
+      }, 3000)
+    }).catch((err) => {
+      setLoading(false)
+      toast.error(err.response.data.message)
+    })
   };
 
   const handleCPF = (event: any) => {

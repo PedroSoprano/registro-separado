@@ -19,6 +19,8 @@ const schema = Yup.object().shape({
   profissao: Yup.string().required('Profissão é obrigatório'),
   escolaridade: Yup.string().required('Escolaridade é obrigatório'),
   redesSociais: Yup.string().required('Rede social é obrigatório'),
+  complemento: Yup.string().required('Complemento é obrigatório'),
+  nomePai: Yup.string(),
   cep: Yup.string().required('Cep é obrigatório'),
   rua: Yup.string().required('Rua é obrigatório'),
   bairro: Yup.string().required('Bairro é obrigatório'),
@@ -281,6 +283,13 @@ function App() {
               variant="filled"
               sx={errors.numeroCasa?.message ? inputError : input}
             />
+            <TextField
+              label={errors.complemento?.message ?? "Complemento"}
+              {...register("complemento")}
+              error={!!errors.complemento?.message}
+              variant="filled"
+              sx={errors.complemento?.message ? inputError : input}
+            />
           </Box>
           <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
             Documentos
@@ -338,6 +347,14 @@ function App() {
               variant="filled"
               {...register}
               sx={windowWidth < 550 ? errors.nomeMae?.message ? inputError : input : errors.nomeMae?.message ? inputError : { ...input, gridColumn: "1/3" }}
+            />
+            <TextField
+              label={errors.nomePai?.message ?? "Nome do Pai"}
+              {...register("nomePai")}
+              error={!!errors.nomePai?.message}
+              variant="filled"
+              {...register}
+              sx={windowWidth < 550 ? errors.nomePai?.message ? inputError : input : errors.nomePai?.message ? inputError : { ...input, gridColumn: "1/3" }}
             />
           </Box>
           <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>

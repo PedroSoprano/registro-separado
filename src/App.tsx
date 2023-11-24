@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, Switch, TextField, Typography } from '@mui/material';
 import { body, button, buttonMobile, buttonMobileSuccess, buttonSuccess, container, containerLoadingBtn, containerLoadingBtnMobile, containerSelect, form, input, inputError, inputGroup1, inputGroup2, inputGroupMobile, title } from './styles/AppStyles';
@@ -19,7 +21,7 @@ const schema = Yup.object().shape({
   profissao: Yup.string().required('Profissão é obrigatório'),
   escolaridade: Yup.string().required('Escolaridade é obrigatório'),
   redesSociais: Yup.string().required('Rede social é obrigatório'),
-  complemento: Yup.string().required('Complemento é obrigatório'),
+  complemento: Yup.string(),
   nomePai: Yup.string(),
   cep: Yup.string().required('Cep é obrigatório'),
   rua: Yup.string().required('Rua é obrigatório'),
@@ -134,7 +136,7 @@ function App() {
   }, [dataNascimentoListenner])
 
   useEffect(() => {
-    if (cepListenner?.length == 8) {
+    if (cepListenner?.length === 8) {
       setCeploading(true)
       axios.get(`https://brasilapi.com.br/api/cep/v2/${cepListenner}`, {
       }).then((res) => {
@@ -144,7 +146,7 @@ function App() {
         setCeploading(false)
       }).catch((err) => {
         err.response.data.errors.map((erro: any) => {
-          if (erro.message == "CEP NAO ENCONTRADO") {
+          if (erro.message === "CEP NAO ENCONTRADO") {
             toast.error("Cep não encontrado")
             setValue("rua", "")
             setValue("bairro", "")
@@ -222,15 +224,25 @@ function App() {
               variant="filled"
               sx={errors.profissao?.message ? inputError : input}
             />
+            <FormControl variant='filled'>
+              <InputLabel sx={errors.escolaridade?.message ? { color: "#d32f2f" } : { color: "#202B71" }}>{errors.escolaridade?.message ?? "Escolaridade"}</InputLabel>
+              <Select
+                label={errors.escolaridade?.message ?? "Escolaridade"}
+                {...register("escolaridade")}
+                error={!!errors.escolaridade?.message}
+                sx={errors.escolaridade?.message ? inputError : { ...input, padding: 0 }}
+                defaultValue={""}
+              >
+                <MenuItem value={0}>Ensino fundamental incompleto</MenuItem>
+                <MenuItem value={1}>Ensino fundamental completo</MenuItem>
+                <MenuItem value={2}>Ensino médio incompleto</MenuItem>
+                <MenuItem value={3}>Ensino médio completo</MenuItem>
+                <MenuItem value={4}>Superior incompleto</MenuItem>
+                <MenuItem value={5}>Superior completo</MenuItem>
+              </Select>
+            </FormControl>
             <TextField
-              label={errors.escolaridade?.message ?? "Escolaridade"}
-              {...register("escolaridade")}
-              error={!!errors.escolaridade?.message}
-              variant="filled"
-              sx={errors.escolaridade?.message ? inputError : input}
-            />
-            <TextField
-              label={errors.redesSociais?.message ?? "Rede Social"}
+              label={errors.redesSociais?.message ?? "Instagram"}
               {...register("redesSociais")}
               error={!!errors.redesSociais?.message}
               variant="filled"
@@ -283,7 +295,10 @@ function App() {
               variant="filled"
               sx={errors.numeroCasa?.message ? inputError : input}
             />
+          </Box>
+          <Box sx={{ marginTop: 3 }}>
             <TextField
+              fullWidth
               label={errors.complemento?.message ?? "Complemento"}
               {...register("complemento")}
               error={!!errors.complemento?.message}
@@ -340,7 +355,10 @@ function App() {
               variant="filled"
               sx={errors.secao?.message ? inputError : input}
             />
+          </Box>
+          <Box sx={{ display: 'flex', gap: 2, marginTop: 3 }}>
             <TextField
+              fullWidth
               label={errors.nomeMae?.message ?? "Nome da mãe"}
               {...register("nomeMae")}
               error={!!errors.nomeMae?.message}
@@ -349,6 +367,7 @@ function App() {
               sx={windowWidth < 550 ? errors.nomeMae?.message ? inputError : input : errors.nomeMae?.message ? inputError : { ...input, gridColumn: "1/3" }}
             />
             <TextField
+              fullWidth
               label={errors.nomePai?.message ?? "Nome do Pai"}
               {...register("nomePai")}
               error={!!errors.nomePai?.message}

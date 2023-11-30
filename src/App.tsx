@@ -122,6 +122,18 @@ function App() {
     setPhoneNumber(formattedPhoneNumber);
   }
 
+  const handleCEP = (event: any) => {
+    const { value } = event.target;
+    const numericValue = value.replace(/\D/g, '');
+
+    let formattedCEP = numericValue;
+    if (numericValue.length > 5) {
+      formattedCEP = `${numericValue.slice(0, 5)}-${numericValue.slice(5)}`;
+    }
+
+    setValue('cep', formattedCEP);
+  }
+
   const cepListenner = watch("cep")
   const dataNascimentoListenner = watch("dataNascimento")
 
@@ -136,9 +148,12 @@ function App() {
   }, [dataNascimentoListenner])
 
   useEffect(() => {
-    if (cepListenner?.length === 8) {
+    if (cepListenner?.length === 9) {
       setCeploading(true)
-      axios.get(`https://brasilapi.com.br/api/cep/v2/${cepListenner}`, {
+      axios.get(`https://brasilapi.com.br/api/cep/v1/${cepListenner}`, {
+        headers: {
+          "Content-Type": 'application/json'
+        }
       }).then((res) => {
         setValue("rua", res.data.street)
         setValue("bairro", res.data.neighborhood)
@@ -258,6 +273,7 @@ function App() {
               {...register("cep")}
               error={!!errors.cep?.message}
               variant="filled"
+              onChange={(e) => handleCEP(e)}
               sx={windowWidth < 550 ? errors.cep?.message ? inputError : input : errors.cep?.message ? inputError : input}
             />
             {cepLoading ?
